@@ -1,4 +1,4 @@
-Tutorial 17: 
+Tutorial 17: Vertex Buffer Objects
 
 Descrição
 
