@@ -17,6 +17,6 @@ Usaremos pressionamentos de teclas para alternar nossa filtragem de textura. Qua
 nele. Mesmo que estivéssemos fora da classe LTexture, desde que tenhamos a ID da textura, podemos fazer operações na textura. Em seguida, alternamos e configuramos a filtragem para 
 a textura. Essas chamadas de função devem parecer familiares porque as chamamos na nossa função de carregamento de textura. "GL_TEXTURE_MAG_FILTER" controla como a textura é filtrada
 quando a textura está esticada. O padrão que definimos quando carregamos a textura é "GL_LINEAR". Isso significa que nossa textura mistura os pixels ao alongá-lo. 
-Quando "GL_TEXTURE_MAG_FILTER" estiver configurado para "GL_NEAREST", o OpenGL apenas agarra o valor texel mais próximo, o que resulta em um aspecto mais intenso. Observe que também 
+Quando "GL_TEXTURE_MAG_FILTER" estiver configurado para "GL_NEAREST", o OpenGL apenas agarra o valor pixel mais próximo, o que resulta em um aspecto mais intenso. Observe que também 
 definimos "GL_TEXTURE_MIN_FILTER", que controla a forma como a textura é filtrada quando ela é menor. "GL_TEXTURE_MAG_FILTER" e "GL_TEXTURE_MIN_FILTER" não precisam ser o mesmo valor 
 se você quiser filtros diferentes aplicados em situações diferentes. Finalmente, depois de trocar a filtragem, desvinculamos a textura.
