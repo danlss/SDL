@@ -1,1 +1,396 @@
 
+* bool init()
+- Função que inicia o SDL, cria a janela e inicializa o OpenGL.
+- Parametros: void.
+- Retorno: tipo booleano.
+
+
+* bool initGL()
+- Função que inicializa os recursos internos do OpenGL.
+- Parametros:  void.
+- Retorno: tipo booleano.
+
+* SDL_Init()
+- Função que inicializa os recursos do SDL.
+- Parametros:  SDL_INIT_TIMER
+  Subsistema temporizador
+  SDL_INIT_AUDIO
+  Subsistema de áudio 
+  SDL_INIT_VIDEO
+  Subsistema de video; Inicializa automaticamente o subsistema de eventos
+  SDL_INIT_JOYSTICK
+  Subsistema joystick; Inicializa automaticamente o subsistema de eventos
+  SDL_INIT_HAPTIC
+  Subsistema haptico (feedback de força)
+  SDL_INIT_GAMECONTROLLER
+  Subsistema de controle; Inicializa automaticamente o subsistema do joystick
+  SDL_INIT_EVENTS
+  Subsistema de eventos
+  SDL_INIT_EVERYTHING
+  Todos os subsistemas acima
+  SDL_INIT_NOPARACHUTE
+  compatibilidade; Esta bandeira é ignorada
+- Retorno: tipo inteiro, 0 com erro ou um codigo de erro.
+
+* SDL_GL_SetAttribute()
+- Função que define um atributo de janela OpenGL antes da criação da janela.
+- Parametros: Attr
+O atributo OpenGL para definir, valor para o atributo
+- Retorno: Retorna 0 em êxito ou um código de erro negativo na falha.
+
+* void handleKeys( unsigned char, int , int )
+- Função que manipula as entradas e assume o valor ASCII de uma tecla pressionada e a posição atual do mouse.
+  Toda esta função faz é alternar um sinalizador bool quando a tecla q é pressionada.
+- Parametros:  char letra para manipulaaçãao de quadros, int x e int y representam a possição atual do mouse em coordenadas (x, y).
+- Retorno: void.
+
+
+* void update()
+- 
+- Parametros: void.
+- Retorno: void.
+
+* void render()
+- Função que limpa o buffer de cores usando glClear () e, em seguida, faz um quad na tela. 
+  Não podemos usar SDL_Flip () atualizar a tela, precisamos chamar SDL_GL_SwapBuffers () para atualizar uma janela SDL / OpenGL.
+- Parametros:  void.
+- Retorno: void.
+
+* void close()
+- Função que destrói a janela construída.
+- Parametros: void.  
+- Retorno: void.
+
+* SDL_CreateWindow()  
+- Função que cria a janela. 
+- Parametros: O primeiro argumento define a legenda da janela, Os dois argumentos seguintes definem a posição x e y em que a janela é criada, 
+  Os outros definem a largura e a altura da janela, O último argumento são os sinalizadores de criação.
+- Retorno: ponteiro para o tipo SDL_Window.
+
+* SDL_GL_CreateContext()
+- Função que cria o contexto OpenGL.
+- Parametros: gwindow do tipo SDL_Window que configura a janela. 
+- Retorno: tipo SDL_GLContext que faz parte da criação do contexto OpenGL.
+
+* glMatrixMode()
+- Especifica a matriz atual.
+- Parametros: GL_MODELVIEW que aplica as operações da matriz subsequentes para a pilha de matriz de modelagem;
+  GL_PROJECTION que aplica as operações da matriz subsequentes para a pilha de matriz de projecção;
+  GL_TEXTURE que aplica as operações da matriz subseqüentes à pilha matriz de textura.
+- Retorno: tipo void.
+
+* glClearColor()
+- Função que especifica os valores para o buffer de cores.
+- Parametros: cada parametro é um valor de cor que inicializa o buffer de cores. É inicializado com 0.
+- Retorno: tip void.
+
+* glclear()
+- Função que limpar os buffers para valores predefinidos. 
+- Parametros: 
+- Retorno: 
+
+* glBegin()
+- Função que delimita os vértices de um tipo primitivo ou um grupo de tipos primitivos.
+- Parametros: Variável mode (Especifica os tipos primitivos que serão criados a partir dos vértices presentes entre o glBegin e o subsequente glEnd).
+  Constantes aceitas: GL_POINTS, GL_LINES, GL_LINE_STRIP, GL_LINE_LOOP, GL_TRIANGLES, GL_TRIANGLE_STRIP, GL_TRIANGLE_FAN, GL_QUADS, GL_QUAD_STRIP e GL_POLYGON.
+- Retorno: tipo void.
+
+* glEnd()
+- Função que especifica que os vértices serão enviados e renderiza as figuras.
+- Parametros: tipo void. 
+- Retorno: tipo void.
+
+* SDL_DestroyWindow()
+- Função que destrói a janela.
+- Parametros: A janela que será destruída.
+- Retorno: tipo void.
+
+* SDL_StartTextInput()
+- Função que é usada para começar a aceitar eventos de entrada de texto Unicode.
+- Parametros: tipo void.
+- Retorno: tipo void.
+
+* SDL_PollEvent()
+- Função que pesquisa eventos pendentes.
+- Parametros: evento a ser pesquisado
+- Retorno: inteiro.
+
+* SDL_GetMouseState()
+- Função que indica o atual estado do mouse.
+- Parametros: coordenadas (x, y) da posição do mouse.
+- Retorno: o estado atual do botão.
+
+* SDL_GL_SwapWindow()
+- Função que atualiza a tela com renderização OpenGL.
+- Parametros: a janela a ser atualizada.
+- Retorno: tipo void.
+
+* SDL_StopTextInput() 
+- Função usada para parar de receber eventos de entrada.
+- Parametros: tipo void.
+- Retorno: tipo void.
+
+* glLoadIdentity() 
+- Função que substitui a matriz atual pela matriz identidade.
+- Parametros: tipo void.
+- Retorno: tipo void.
+
+* glOrtho() 
+- Função que multiplica a matriz atual com uma matriz ortográfica (2D). 
+- Parametros: Coordenadas para os planos de corte vertical esquerdo e direito (left, right);
+  Coordenadas para os planos de corte horizontal superior e inferior (bottom, top);
+  A distância para os planos de corte de profundidade mais próximo e afastado (nearVal, farVal).
+- Retorno: tipo void.
+
+* glGetError()
+- Função que retorna informalão de erro.
+- Parametros: tipo void.
+- Retorno: tipo GLenum.
+
+* glTranslatef() 
+- Função que multiplica a matriz atual por uma matriz de translação.
+- Parametros: Coordenadas x, y e z do vetor de translação.
+- Retorno: tipo void.
+
+* glVertex() 
+- Função que especifica um vértice. 
+- Parametros: Coordenadas x,y,z e w do vértice. Nem todos os parâmetros estão presentes em todas as formas do comando.
+- Retorno: tipo void.
+
+* SDL_GL_SetSwapInterval() 
+- Função que define o intervalo de permuta para o contexto OpenGL.
+- Parametros: intervalo inteiro, 0 para atualizações imediatas, 1 para atualizações sincronizadas com o retorno vertical, -1 para rasgamento tardio.
+- Retorno: inteiro que Retorna 0 com sucesso ou -1 se a configuração do intervalo de troca não for suportada.
+
+* glPushMatrix()
+- Salva uma cópia da matriz atual e insere em uma pilha para esta ser utilizada mais tarde. Importante lembrar que a pilha de matrizes não é infinita.
+  Inserindo matrizes demais na pilha o programa irá retornar um erro de GL_STACK_OVERFLOW da função glGetError().
+- Parametros: tipo void.
+- Retorno: tipo void.
+
+* glPopMatrix()
+- Função que retira a matriz padrão antiga da pilha de matrizes e mescla com a matriz atual.
+- Parametros: tipo void.
+- Retorno: tipo void.
+
+* loadTextureFromPixels32()
+- Função que cria uma textura a partir de pixels membros, deleta os pixels membros e reportar erro se não atingir sucesso.
+- Parametros: proporção da tela.
+- Retorno: tipo booleano, true ou false.
+
+* freeTexture()
+- Função que exlui a textura se ela existir.
+- Parametros: tipo void.
+- Retorno: tipo void.
+
+* GLuint getTextureID()
+- Função que retorna o id ou nome da textura.
+- Parametros: tipo void.
+- Retorno: tipo char.
+
+* GLuint textureWidth()
+- Função que retorna a largura da textura.
+- Parametros: tipo void.
+- Retorno: retorna a largura da textura.
+
+* GLuint textureHeight()
+- Função que retorna a altura da textura.
+- Parametros: tipo void.
+- Retorno: altura da textura.
+
+* glGenTextures()
+- Função que gera os nomes de uma quantidade determinada de texturas.
+- Parametros: quantidade de texturas e um array com nome ou id das texturas.
+- Retorno: tipo void.
+
+* glBindTexture()
+- Função que vincula uma textura nomeada a uma textura padrão da biblioteca.
+- Parametros: Vincula uma textura nomeada a uma textura padrão da biblioteca.
+- Retorno: tipo void.
+
+* glTexImage2D()
+- Função que especifica uma textura bidimensional.
+- Parametros: A textura padrão a ser vinculada.
+- Retorno: tipo void.
+
+* glTexParameteri()
+- Função que retorna os valores de parametro da textura.
+- Parametros: 
+  (target) A textura de destino;
+  (pname) O nome simbólico de um parâmetro de textura de valor único;
+  (param ou params) Um valor para pname ou um ponteiro para um array onde os valores de pneme estão guardados. 
+- Retorno: tip void.
+
+* glDeleteTextures()
+- Função que deleta uma quantidade definida de texturas.
+- Parametros: O número de texturas a serem deletadas e o array de texturas que serão deletadas.
+- Retorno: tipo void.
+
+* glTexCoord()
+- Função que define as coordenadas da textura atual. (pode ser s, d, f, t, r.. dependendo do tipo)
+- Parametros: coordenadas x e y.
+- Retorno: tipo void.
+
+* loadMedia()
+- Função que carrega a textura.
+- Parametros: tipo void.
+- Retorno: tipo void.
+
+* loadTextureFromFile()
+- Função que Carrega os pixels do Arquivo e faz pads para obter duas dimensões.
+- Parametros: Caminho para o arquivo.
+- Retorno: tipo booleano: true ou false para carregamento.
+
+* SDL_StartTextInput()
+- Função usada para começar a aceitar eventos de entrada de texto Unicode.
+- Parametros: tip void.
+- Retorno: tipo void.
+
+* glTexSubImage2D()
+- Função que especifica uma subimagem textura 2D.
+- Parametros: 
+  ºtarget
+  Especifica a textura do alvo.
+  ºlevel
+  Especifica o número do nível de detalhe. O nível 0 é o nível da imagem base. O nível n é a nima imagem de redução de mipmap.
+  ºXoffset
+  Especifica um desvio de texel na direção x dentro da matriz de textura.
+  ºYoffset
+  Especifica um desvio de texel na direção y dentro da matriz de textura.
+  ºWidth
+  Especifica a largura da subimagem de textura.
+  ºHeight
+  Especifica a altura da subimagem de textura.
+  ºformat
+  Especifica o formato dos dados de pixels.
+  ºData
+  Especifica um ponteiro para os dados da imagem na memória.
+- Retorno: tipo void.
+
+* ilGenImages()
+- Função que armazena nomes de imagens numéricas em imagens.
+- Parametros: 
+  Num= Número de nomes de imagens a serem gerados;   Images= Ponteiro no qual os nomes das imagens geradas são armazenados.
+- Retorno: tipo void.
+
+
+* ilBindImage()
+- Função que vincula uma imagem ao programa.
+- Parametros: Image= nome de uma imagem.
+- Retorno: tipo void.
+
+* ilLoadImage()
+- Função que permite uma interface geral para as rotinas internas específicas de carregamento de arquivos. 
+- Parametros: FileName= especifica de qual arquivo carregar uma imagem.
+- Retorno: tipo booleano, true para sucesso, false para erro.
+
+* ilConvertImage()
+- Função que converte a imagem vinculada atual de seu formato.
+- Parametros: 	
+  DestFormat
+  O formato em que a imagem atual deve ser convertida.
+  DestType
+  O tipo em que a imagem atual deve ser convertida.
+- Retorno: tipo booleano, true ou false.
+
+* iluImageParameter()	
+- Função que modifica o comportamento de algumas funções ilu.
+- Parametros:  	
+  PName
+  Nome do parâmetro
+  Param
+  Comportamento para usar
+- Retorno: tipo void.
+
+* iluEnlargeCanvas()
+- Função que amplia a tela da imagem atual, limpando o plano de fundo para a cor especificada em ilClearColour. 
+- Parametros: Width
+  Nova largura de imagem - deve ser maior do que a largura da imagem atual.
+  Height
+  Nova altura da imagem - deve ser maior do que a largura da imagem atual.
+  Depth
+  Nova profundidade da imagem - deve ser maior do que a largura da imagem atual.
+- Retorno: tipo booleano, true ou false.
+
+* ilDeleteImages()
+- Função que exclui os nomes de imagens numéricas especificadas nas Imagens. 
+- Parametros: 	
+  Num
+  Número de nomes de imagem a serem excluídos.
+  Imagens
+  Ponteiro para nomes de imagens a serem excluídos.
+- Retorno: tipo void.
+
+* glBlendFunc()
+- Função que especifica a aritmetica de pixels.
+- Parametros: 
+  Sfactor
+  Especifica como os fatores de mistura de fonte vermelha, verde, azul e alfa são computados.
+  Dfactor
+  Especifica como os fatores de mistura de destino vermelho, verde, azul e alfa são computados.
+- Retorno: void.
+
+* ilInit()
+- Função que começa DevIL e deve ser chamado antes de usar o DevIL, ou então o DevIL provavelmente irá falhar quando você tentar usá-lo.
+- Parametros: void.
+- Retorno: void.
+
+* ilInit()
+- Função que iluInit começa ILU e deve ser chamado antes de usar ILU.
+- Parametros: void.
+- Retorno: void.
+
+* ilClearColour()
+- Função que define a cor de limpeza atual para ser usada por futuras chamadas para ilClearImage.
+- Parametros: cor a ser limpa. (green, red, blue...)
+- Retorno: void.
+
+* IlClearImage()
+- Função que simplesmente limpa a imagem às cores especificadas no ilClearColour.
+- Parametros: void.
+- Retorno: void.
+
+* 
+- Função que 
+- Parametros: 
+- Retorno: 
+
+* 
+- Função que 
+- Parametros: 
+- Retorno: 
+
+* 
+- Função que 
+- Parametros: 
+- Retorno: 
+
+* 
+- Função que 
+- Parametros: 
+- Retorno: 
+
+* 
+- Função que 
+- Parametros: 
+- Retorno: 
+
+* 
+- Função que 
+- Parametros: 
+- Retorno: 
+
+* 
+- Função que 
+- Parametros: 
+- Retorno: 
+
+* 
+- Função que 
+- Parametros: 
+- Retorno: 
+
+* 
+- Função que 
+- Parametros: 
+- Retorno: 
