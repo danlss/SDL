@@ -1,0 +1,35 @@
+Tutorial 18: 
+
+Descrição
+
+
+O uso com glBegin () / glEnd () com glVertex () (conhecido como renderização do modo imediato) é obsoleto nas implementações OpenGL modernas. Se você quiser renderizar um polígono 
+texturizado nas implementações OpenGL modernas, você terá que fazer isso com VBOs.
+Em LTexCoord.h teremos um novo arquivo com um novo tipo de dados. Um LTexCoord é um tipo de dados que vamos usar para facilitar a manipulação de coordenadas de textura. Cada um dos 
+vértices para o nosso quadrado texturizado tem uma posição de vértice e uma coordenada de textura, então temos outro arquivo com outro tipo de dados para juntá-los. Cada um dos nossos 
+cantos de quadros texturizados será representado por um objeto LVertexData2D. Teremos novas variáveis ​​de membros para o nosso VBO e IBO. Também teremos as novas funções initVBO() e 
+freeVBO() que manipulam nossas variáveis ​​VBO.
+Em LTexture.cpp está o nosso inicializador VBO, ele só será executado se uma textura já estiver carregada. Não há nenhum ponto em um VBO texturizado sem textura. Primeiro, declaramos 
+nossos dados de vértices e dados de índice que vamos enviar para a GPU. Então estabelecemos nossos índices. A razão pela qual não estamos configurando nossos dados de vértice é porque 
+ele será configurado na função de renderização. A razão pela qual estamos usando "GL_DYNAMIC_DRAW" é porque vamos atualizar os dados do vértice, em oposição ao tutorial anterior, onde 
+enviamos os dados uma vez e reutilizamos. Como no tutorial anterior, geramos os buffers e enviamos os dados para eles. Depois que nossos buffers são criados, desvinculamos os buffers.
+Nós chamamos nosso inicializador de VBO sempre que carregamos uma textura para que o VBO esteja pronto para usar para renderizar nosso quadrado texturizada. O resto 
+do nosso carregamento de textura é o mesmo que antes. A única parte em que nosso VBO vai afetar é como o quadrado texturizado é renderizado. No topo da função LTexture render(), nosso 
+cálculo de coordenadas de vértice e textura é praticamente o mesmo que quando usamos o modo imediato. Os dados em si não estão mudando, é como está sendo enviado para o GPU que está 
+mudando. Depois de calcular nossas coordenadas de textura e coordenadas de vértice, definimos os dados na matriz de dados de vértices. Especificaremoss as mesmas coordenadas de 
+vértice/textura que antes, apenas agora os dados serão colocados em uma matriz. Depois de configurar nossas coordenadas de vértice/textura, é hora de renderizar o nosso quadrado 
+texturizado. Para fazer isso, devemos vincular nossa textura, habilitar arrays de coordenadas vertex com "GL_VERTEX_ARRAY" e também habilitar arrays de coordenadas de textura com 
+"GL_TEXTURE_COORD_ARRAY". Antes de poder renderizar nosso quadrado texturizado, precisamos atualizar os dados de vértice no VBO com os dados de vértice que calculamos na parte superior 
+da função render(). Primeiro, ligamos o VBO para que possamos fazer operações nele. Então chamamos glBufferSubData() para atualizar os dados de vértice no VBO atual da mesma forma 
+que você usaria glTexSubImage2D() para atualizar uma textura. O primeiro argumento especifica o tipo de dados que você está atualizando. O segundo argumento é o deslocamento de bytes que 
+você quer começar a atualizar os dados, e porque estamos atualizando o VBO inteiro, começamos a partir do endereço inicial 0. O terceiro argumento é o tamanho dos dados que você está 
+atualizando em bytes. Estamos enviando 4 LVertexData2Ds, então 4 vezes o tamanho de um LVertexData2D. O último argumento é o ponteiro para os dados do vértice. Temos que definir o 
+ponteiro do vértice como fizemos na última vez, e agora temos que definir o ponteiro da coordenada da textura desde que estamos texturando. Como no modo imediato, você deseja enviar suas 
+coordenadas de textura antes das coordenadas do seu vértice. Porque temos nossas coordenadas de vértice e coordenadas de textura no mesmo VBO, definir os ponteiros é um pouco mais 
+envolvido. O primeiro argumento para as funções glPointer é a quantidade de eixos por coordenada. O segundo argumento é o tipo de dados para os dados do ponteiro. O terceiro argumento 
+é o passo. Usando o offsetof macro, podemos dar ao ponteiro de coordenadas de vértice e textura um endereço de partida diferente. Quando definimos o último argumento das funções 
+glPointer, o endereço inicial dos dados, damos-lhe o deslocamento de bytes do membro dentro da estrutura LVertexData2D. Com o nosso conjunto de dados de coordenadas de vértice e 
+coordenadas de textura, ligamos o nosso IBO e renderizamos o nosso quadrado VBO texturizado. Depois de terminarmos de renderizar o nosso quadrado VBO textured, desativamos os arrays 
+de coordenadas de vértice e textura. Quando terminamos com o nosso VBO e IBO, nós os liberamos usando glDeleteBuffers(). Não liberamos o VBO quando liberamos a textura. Pode acontecer 
+onde carregamos uma textura e depois outra. Neste caso, podemos reutilizar o VBO de textura para textura. Nós liberamos o VBO depois que o próprio objeto LTexture é desalocado. Todas 
+essas operações VBO são invisíveis fora da classe.

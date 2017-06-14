@@ -1,0 +1,27 @@
+Tutorial 2 : Matrizes e cores de polígonos
+
+Bibliotecas : SDl,SDL Opengl,IO padrão e strings.
+
+Descrição 
+
+Neste tutorial, vamos configurar um sistema de coordenadas 640x480 e, enquanto estivermos nisso, vamos dar alguma cor ao nosso polígono.Nós tambem explicaremos o pipeline OpenGL
+e como ele transforma vértices em pixels.No incio do nosso codigo vamos ter novamente nossa função de ultilidade mais dessa vez ela terá algumas mudanças que seram adicionadas
+as constantes do modo de cor e a função handleKeys(),as constantes de modo de cor sao apenas simbolos para renderizar nosso quadrado.No SDL os eventos sao tratados como filas de
+eventos.Na nossa função main(), definiremos a nossa função handleKeys() como retorno de chamada para lidar com as chaves.No topo do nosso codigo teremos 2 variaveis globais 
+COLOR_MODE_CYAN e COLOR_MODE_MULTI que iram controlar se renderizamos um quadrado ciano sólido ou um quadrado multicolorido.Com a função initGL() nós iremos inicializar a bibli-
+oteca de graficos, é basicamente a mesma implementação do tutorial um mais neste tutorial dois nós iremos chamar a função glOrtho (), o que glOrtho () faz é multiplicar a matriz 
+atual contra uma matriz de perspectiva ortográfica (ou 2D) com os valores esquerdo, direito, inferior, superior, próximo e distante nos argumentos. Multiplicamos a matriz 
+ortográfica contra a matriz de projeção. É para isso que serve a matriz de projeção, para controlar como vemos nossa geometria. Se nós quiséssemos a perspectiva 3D, nós 
+multiplicaríamos a matriz de projeção contra a matriz de perspectiva. Na função render() depois de limpar a tela, definimos o modo de matriz atual para modelview. Fazemos isso 
+porque em nossa função de manipulação de chaves vamos mudar a matriz de projeção. Se não tivermos certeza de que a matriz atual é a matriz modelview, as operações de matriz de 
+projeção e modelview serão feitas incorretamente e não obteremos resultados.A origem da cena está no canto superior esquerdo. Queremos que o nosso quadrado apareça no meio da 
+tela, então nós a traduzimos (ou a deslizamos) para o centro da tela usando glTranslate (). GlTranslate () multiplica uma matriz de tradução contra a matriz atual (que no caso 
+é a matriz modelview) de modo que qualquer geometria que é processada é traduzida a quantidade x, y e z dada nos argumentos. Outra coisa a ser observada é que em cada frame 
+carregamos a matriz de modelview de identidade antes da renderização. Se não o fizéssemos, as transformações de tradução se acumulariam. Então, se traduzíssemos 10 quadros, 
+depois de 60 quadros, teríamos traduzido 600. Eventualmente, nós traduziríamos completamente da tela, nesta função render nós apenas renderizamos o nosso quadrado.No final da 
+nossa função render () depois que nossos vértices foram transformados em pixels, trocamos o buffer frente / trás para atualizar a tela. Após essa função render() a função 
+handleKeys() irá basicamente verificar se a tecla q foi apertada e se sim ela irá trocar o quadrado de um lado para o outro entre ciano e multicor. Por ultimo nossa função 
+close() que irá apenas finalizar a janela. A nossa main() será será a mesma do tutorial um.
+
+
+

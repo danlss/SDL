@@ -1,0 +1,15 @@
+Tutorial 16: Matrizes de vértice
+
+Descrição
+
+
+Quando você faz uma chamada OpenGL, fica colocado no buffer do comando OpenGL. Quando você está lidando com modelos que têm toneladas de polígonos, é um desperdício ter uma ligação 
+para glVertex () para cada vértice individual. Esta é uma das razões pelas quais a função glVertex () foi obsoleta no OpenGL 3. Os arrays Vertex nos permitem enviar dados vertex em 
+conjuntos em vez de individualmente.
+Em LVertexPos2D.h, nós teremos um novo arquivo para o nosso projeto para um novo tipo de dados. LVertexPos2D define uma posição de vértice 2D. Ter esse tipo de dados facilitará a 
+definição de geometria.
+No topo de LUtil.cpp, declaramos as 4 posições do vértice para o nosso quadrado. Em loadMedia(), na verdade não carregamos nenhum arquivo, mas nós definimos os vértices para o 
+nosso quadrado. No topo do render(), limpamos nossa tela como de costume. Em seguida, chamamos o GlEnableClientState() para habilitar os arrays de vértices para que possamos começar 
+a enviar nossos dados de vértice. Então chamamos glVertexPointer() para definir nossos dados de vértice. O primeiro argumento é a quantidade de coordenadas por vértice, o que é 
+dois neste caso, pois estamos fazendo 2D. O segundo argumento é o tipo de dados para cada coordenada, que neste caso estamos usando GLfloat. O terceiro argumento é stride, que o 
+byte é compensado entre vértices. Vamos usar isso nos futuros tutoriais, mas, por enquanto, configuramos para zero. O último argumento é o ponteiro para a nossa variedade de floats.

@@ -1,0 +1,35 @@
+Tutorial 17: 
+
+Descrição
+
+
+Os arrays Vertex são mais eficientes do que enviar vértices um por um. O que é ainda mais eficiente é enviar seus dados de vértice para um objeto de buffer de vértice, que é o que é 
+usado pelas implementações OpenGL modernas. Com objetos de buffer de vértice você pode enviar seus dados de vértice uma vez (em oposição a cada vez que você tiver um novo conjunto de 
+dados para desenhar) e apenas tenha armazenado na GPU quando precisar usar isto.
+No topo de LUtil.cpp, definimos os vértices do nosso quadrado como antes. Desta vez também temos dados de índice para definir. No tutorial Vertex Arrays, chamamos glDrawArrays() para 
+desenhar nossos dados de vértice. GlDrawArrays() apenas tomou nossos dados de vértice e desenhou cada vértice em ordem. Neste tutorial, vamos usar uma função de desenho que pode desenhar 
+dados de vértice em qualquer ordem. Pode até renderizar o mesmo vértice duas vezes. Para usar esta função, precisamos de um conjunto de índices para especificar como desenhar os dados do 
+vértice. É para isto que a matriz "gIndices" serve. Agora que temos nossos dados de vértice e nossos dados de índice, precisamos armazená-los na GPU. Uma vez que os temos no GPU, 
+precisamos identificá-los. Muito parecido com a forma como as texturas possuem IDs GLuint, os objetos tampão vertex possuem IDs GLuint. Como você pode ver, "gVertexBuffer" é nosso ID de 
+buffer de vértice e ID de buffer de índice "gIndexBuffer". Em loadMedia(), nós definimos nossos dados de vértices, como fizemos com array de vértices. Depois disso, estabelecemos nossos 
+índices de renderização. O que a nossa função de renderização glDrawElements() fará é pegar na matriz de índices, olhe o primeiro elemento na matriz de índice(o que é gIndices [0]) olhe 
+para o seu valor(que é 0) e desenhe o vértice no índice 0 . Em seguida, ele será o segundo elemento na matriz de índice(que é gIndices [1]) olha seu valor(que é 1) e desenhe o vértice 
+no índice 1. Tenho certeza de que você pode ver a maneira como configuramos nossos índices, Estamos a dizer aos vértices GLDrawElements() 0 a 3 em ordem. Agora que temos os dados de 
+vértice e índice definidos, precisamos enviá-los para o GPU dentro de um buffer. Primeiro, nós geramos um nome de buffer usando glGenBuffers(), então nós agarramos o buffer usando 
+glBindBuffer(). Queremos especificar que estamos vinculando uma série de dados de vertex com "GL_ARRAY_BUFFER". Depois de vincular nosso objeto de buffer de vértice(ou VBO), queremos 
+enviar nossos dados de vértice para nossa VBO. Fazemos isso com glBufferData(). Este primeiro argumento é o tipo de dados de buffer que estamos enviando. O segundo argumento é o tamanho 
+do nosso buffer de dados em bytes. Como estamos enviando 4 LVertexPos2Ds, o tamanho é 4 vezes o tamanho de um LVertexPos2D. O terceiro argumento é o endereço de nossos dados de vértice. 
+O último argumento é como os dados devem ser tratados para que o driver possa agir em conformidade. Uma vez que estamos enviando os dados uma vez e desenhamos com ele várias vezes, 
+configuramos-no para "GL_STATIC_DRAW". Agora que nossos dados vertex estão em um buffer na GPU, vamos fazer o mesmo com os dados do índice. Criaremos um objeto de buffer de índice(ou IBO), 
+funciona praticamente o mesmo que criar um VBO. No entanto, uma vez que estamos lidando com dados de índice em vez de dados de vértice, queremos especificar isso usando "GL_ELEMENT_ARRAY_BUFFER".
+No topo da nossa função render(), limpamos a tela e habilitamos matrizes de vértices como antes. Desta vez, vamos usar os dados de vértice de nossa VBO, então nós vinculamos o VBO 
+usando glBindBuffer(). Agora, quando chamamos glVertexPointer() para configurar nossos dados de vértice, ele o obterá da memória de nosso VBO. Uma vez que queremos que ele obtenha os 
+dados do vértice desde o início do VBO, damos um endereço de NULL(que é igual a 0).
+Depois de configurar nossos dados de vértice atuais, queremos configurar nossos dados de índice atuais com glBindBuffer(). Novamente, uma vez que em dados de índice e não dados de 
+vértice, especificamos "GL_ELEMENT_ARRAY_BUFFER" para o nosso buffer. Depois que nosso VBO e IBO são vinculados, desenhamos com eles usando glDrawElements(). O primeiro argumento é o 
+tipo de geometria que você deseja desenhar. O segundo é quantos elementos você deseja desenhar, e porque nós temos 4 índices em nosso IBO que queremos desenhar 4. O terceiro argumento é 
+o tipo de dados para nossos índices e o último o endereço de nossos dados de índice. Lembre-se de que, porque temos um IBO atualmente vinculado, o endereço que damos glDrawElements() 
+será da memória IBO. Como com o nosso VBO, queremos glDrawElements() para lê-lo desde o início, então nós lhe damos um endereço de NULL. Alternativamente, você não poderia vincular um 
+IBO e apenas dar glDrawElements () o ponteiro aos nossos dados de índice. Isso tem as mesmas armadilhas que o uso de matrizes de vértices retas onde você deve enviar os dados do índice 
+para o GPU sempre que você tiver um novo conjunto de índices. As matrizes de vértice e direito são obsoletas no OpenGL 3.0+.
+Depois de concluir o desenho do nosso VBO, desativamos matrizes de vértices e atualizamos a tela.

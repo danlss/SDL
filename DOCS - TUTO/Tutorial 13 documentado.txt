@@ -1,0 +1,23 @@
+Tutorial 13 : Transformações da matriz
+
+Descrição
+
+
+Até agora, fizemos rotação de textura e escala de maneira cortante. Neste tutorial, vamos combinar as transformações da matriz para transformar um quadrado texturizado sem alterar 
+a geometria original. 
+Em LTexture.cpp, a função LTexture render() retornou ao seu estado de pré-estiramento/rotação com a origem do quadrado texturizado no canto superior esquerdo. O que difere desta 
+vez é que não há nenhuma chamada para glLoadIdentity() nesta versão do render(). Se fizéssemos isso, qualquer transformação feita antes dessa chamada seria inútil. Em aplicações 
+OpenGL modernas, os dados de vértice são definidos em pedaços(conhecidos como buffers vertex) para a GPU. É ineficiente enviar dados de vértices diferentes uma e outra vez quando 
+estamos essencialmente a renderizar o mesmo quadrado que acaba de ser transformado de maneiras diferentes. Portanto, é importante saber como obter os resultados que você precisa sem 
+enviar dados de vértices redundantes.
+No topo de LUtil.cpp, temos algumas variáveis ​​globais. Nós temos nossa textura rotativa, o ângulo em que girará e, finalmente, o estado de transformação. Neste tutorial, usaremos 
+diferentes conjuntos de transformações matriciais. "GTransformationCombo" é apenas uma variável para indicar qual deles estamos usando agora. Como na última vez, loadMedia() carrega 
+as texturas e update() atualiza nosso ângulo de rotação. No topo do nosso render(), limpamos o buffer de cores, em seguida, carregamos a matriz de identidade. Lembre-se de que a função 
+LTexture render() já não chama glLoadIdentity(), então agora temos que chamá-lo antes de renderizar o nosso quadrado texturizado. Então, dependendo da combinação de transformação 
+selecionada, aplicamos algumas transformações na matriz modelview. 
+No "case 1: " do LUtil.cpp, chamamos glScale() por último. O que isso faz é quando nós transladamos a metade do lapso do quadrado, a translação não é dimensionada de modo que a rotação 
+quadrado está desligada. No "case 2: ", chamamos glScale() primeiro, o que faz com que o quadrado gire em torno de seu centro, mas como a translação inicial para o centro da tela também 
+é dimensionada, o quadrado gira em torno de seu centro no canto inferior direito da tela. No "case 3: ", não transladamos metade da extensão do quadrado que faz com que o quadrado gire em 
+torno do canto superior esquerdo. No "case 4: ", nós rotamos primeiro, o que faz com que o quadrado roteie em torno do canto superior esquerdo da tela. Finalmente, depois de aplicar 
+nossas transformações, nós renderizamos o quadrado transformado. 
+Em nosso key handler, quando o usuário pressiona Q, restabelecemos o ângulo de rotação e circulamos pelas combinações de transformação.

@@ -1,0 +1,29 @@
+Tutorial 6 : Carregando a textura
+
+Descrição 
+
+Com a ajuda da Developers Image Library AKA DevIL, vamos obter dados de pixels de um arquivo e exibi-lo na tela.
+Uma vez que vamos estar carregando arquivos neste tutorial, é importante que a pasta que contém a mídia deste tutorial esteja em um lugar onde o seu executavel possa 
+encontrá-lo. Normalmente, o execultavel procura arquivos no mesmo diretório em que ele é executado. Se você estiver usando o Visual Studio e executar o executável a partir do 
+IDE, ele procurará arquivos no mesmo diretório que o arquivo vcxproj.
+Vamos começar a descrição pela LTexture.cpp. No topo do LTexture.cpp, incluímos il.h. DevIL foi originalmente conhecido como OpenIL, e os arquivos de origem ainda seguem a 
+convenção de nomenclatura antiga.bool LTexture::loadTextureFromFile( std::string path ) aqui está nossa nova função para carregar uma textura de um arquivo, que leva o 
+caminho para o arquivo. As próximas linhas de código devem parecer familiares. DevIL tem um design de máquina de estado semelhante ao OpenGL. Declaramos um ID inteiro, 
+geramos um ID de imagem DevIL e o ligamos como a imagem atual. Depois de ligar o nosso ID de imagem DevIL, carregamos a imagem usando ilLoadImage ().Se a imagem foi carregada 
+com êxito, nós chamamos ilConvertImage () na imagem atual carregada para certificar-se de que os dados de pixel estejam no formato RGBA.
+Obs: Se você tiver o Unicode habilitado este codigo irá dar um erro . IlConvertImage () vai querer wchar_t que são caracteres unicode. Tudo o que você precisa fazer é 
+converter o std :: string em um wstring e, em seguida, obter o array wchar_t do wstring. 
+Depois que os pixels da imagem são convertidos, simplesmente passamos os dados de pixels para a função loadTextureFromPixels32 () para gerar a textura. A função ilGetData () 
+obtém os dados de pixel da imagem DevIL atual e usamos ilGetInteger () para obter a largura / altura atual da imagem DevIL.
+Agora vamos explicar o funcionamento da LUtil.cpp, na parte superior do LUtil.cpp, incluímos il.h e ilu.h, uma vez que vamos usar utilitários DevIL. Em initGL () depois de 
+inicializar OpenGL, chamamos ilInit () para inicializar DevIL. Em seguida, ilClearColour () é chamado para definir a cor clara DevIL para branco transparente. DevIL realmente 
+tem suas próprias funções internas de renderização que usaremos em futuros tutoriais. 
+Em nossa função loadMedia (), chamamos loadTextureFromFile () para carregar nosso arquivo PNG. Certifique-se de que quando executa este programa que a pasta "Tutorial_6" 
+contendo "textura.png" está no lugar certo.
+Finalmente, na nossa função render () renderizamos o nosso arquivo PNG da mesma forma que renderizamos nossa textura que fizemos a partir da memória no último tutorial.
+
+
+
+
+  
+

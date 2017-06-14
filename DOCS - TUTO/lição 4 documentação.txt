@@ -1,0 +1,24 @@
+Tutorial 4 : Deslocamento e Matrix Pilha
+
+Bibliotecas : SDl,SDL Opengl,IO padrão e strings.
+
+Descrição 
+
+Neste quarto tutorial nós vamos aprender a lidar com grandes ambientes e pra isso precisamos de algum tipo de câmera para definir a área que se esta fazendo. Aqui vamos salvar 
+as transformações para a matriz modelview fazer isso. Na parte superior do nosso codigo definimos coordenadas x / y para a nossa câmera. A função initGL() é praticamente a mesma
+do tutorial três só que agora há uma chamada para glPushMatrix().Neste tutorial, vamos aplicar as transformações de tradução à matriz modelview para percorrer o ambiente. Desta 
+vez, no entanto, em vez de chamar glLoadIdentity () e glOrtho () como fizemos no tutorial Matrizes e cores de polígonos vamos empurrar uma cópia da matriz de modelview inicial 
+rolada para a posição da câmera na pilha para salvá-la,é considerado um mau hábito para aplicar as transformações da câmera à matriz de projeção, pois interfere com os cálculos 
+de névoa e iluminação. Nós apenas fizemos isso no último tutorial por uma questão de simplicidade. Nota: a pilha de matriz não é infinitamente profunda. Empurre muitas matrizes 
+para a pilha e você obterá GL_STACK_OVERFLOW de glGetError (). Na parte superior de nossa função handleKeys (), definimos a posição da câmera para renderização quando o usuário 
+pressiona w / a / s / d. Desde que mudamos a posição da câmera quando o usuário pressionou uma tecla, precisamos mudar nossa matriz de câmera padrão. Primeiro, ponha a antiga 
+matriz padrão fora da pilha para a matriz atual com glPopMatrix (). Em seguida, carregamos a matriz de identidade na matriz de modelo atual. Depois disso, traduzimos a matriz 
+de modelview pelos deslocamentos da câmera, de modo que tudo se tornará relativo à câmera. Como eliminamos a matriz padrão da pilha, precisamos colocar a nossa nova novamente 
+no topo da pilha para que possamos guardá-la para mais tarde. Agora na função render(),em vez de usar glLoadIdentity () para redefinir a matriz de modelview, usaremos 
+glPopMatrix () para carregar a matriz que guardamos com a tradução da câmera. Como precisamos dessa matriz de modelview padrão no próximo quadrado, imediatamente o empurramos 
+para a pilha para salvá-lo para mais tarde. Nós renderizamos uma cena duas vezes a largura / altura da tela. Nossa geometria nunca muda de posição, apenas a câmera muda ao longo 
+de nossa demonstraçao.Neste tutorial, a única transformação que aplicamos é a tradução com glTranslate (). Se você quiser aumentar / diminuir o zoom, você pode escalar a m
+atriz usando glScale (). Se você quiser girar a câmera, você pode usar glRotate (). Se você quiser ver como essas funções funcionam, confira a documentação das funções.
+
+
+

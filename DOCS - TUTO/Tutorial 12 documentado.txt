@@ -1,0 +1,17 @@
+Tutorial 12 : Rotação
+
+Descrição
+
+Neste tutorial não iremos rotacionar a textura. Vamos rotacionar o quadrado ao qual está ligado.
+Em LTexture.cpp, a função LTexture render() agora aceita outro argumento que especifica quantos graus você deseja girar o seu quadrado.A primeira parte da nossa função de renderização
+é em grande parte a mesma em termos de pontos de textura e vértice. 
+Neste tutorial, queremos girar a imagem ao redor do centro. Vamos rodar o quad usando glRotate(), mas antes de fazê-lo queremos que nosso ponto de rotação seja o centro da imagem. 
+A função glRotate() irá girar em torno do ponto atual de translação. No código, traduzimos para o centro da imagem, adicionando o deslocamento dado mais metade do intervalo do 
+quadrado. Então, depois disso, rotamos o quadrado usando glRotate(). O primeiro argumento é quantos graus você deseja girar. Os próximos três argumentos são os componentes x / y / z 
+do vetor que deseja rodar. Aqui estamos rodando em torno do eixo z positivo (que é um vetor que sai da tela e para você). GlRotete () espera um vetor normalizado, mas deve normalizar 
+qualquer vetor que você der.
+Em LUtil.cpp, nossa função loadMedia() carrega nossa textura como sempre. Agora, nossa função de update() realmente faz alguma coisa. Neste tutorial, queremos que a imagem gire a cada
+segundo. Então, adicionamos ao ângulo de rotação 360 graus / o número de quadros por segundo. Como o nosso valor de ângulo não pode continuar para sempre, captamos o valor entre 0 e 360.
+Finalmente, em nossa função render (), nós renderizamos nossa textura girada.
+Existe um motivo do por que não fizemos o cálculo de rotação em render(). Em uma renderização de loop de jogo apropriada não deve atualizar nenhum objeto, basta processá-los como estão 
+atualmente. Se você nunca chama a update1(), render() deve sempre renderizar a mesma coisa.

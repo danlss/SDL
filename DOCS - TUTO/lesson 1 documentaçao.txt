@@ -1,0 +1,36 @@
+Hello Opengl: Seu primeiro poligono
+
+Descriçao
+
+Nesse primeiro tutorial iremos aprender a exibir um quadrado na tela, agora após ter aprendido a instalar a biblioteca SDl no codeblocks,nesse primeiro programa nós iremos
+ultilizar quatro bibliotecas SDl,SDL Opengl,IO padrão e strings,primeira coisa a se fazer no codigo desse primeiro tutorial é inicializar as constantes da dimensão da tela
+que nossa caso vão ser SCREEN_WIDTH e SCREEN_HEIGHT,com isso inicializando a altura e largura respectivamente,após isso nós iremos declarar a funçao bool init() que é para 
+iniciar SDL,criar a janela e incializar o OpenGL,agora nós iremos declarar a funçao bool initGL() que ira inicializar os recursos internos do OpenGL,nós agora vamos declarar 
+a funçao vazia handleKeys( unsigned char key, int x, int y) que manipula as entradas e assume o valor ASCII de uma tecla pressionada e a posição atual do mouse.Tudo o que 
+esta função faz é alternar um sinalizador bool quando a tecla q é pressionada.Agora iremos declarar a funçao void update() que irá fazer a atualizaçao por quadro.Agora 
+iremos declarar a função void render() que limpa o buffer de cores usando glClear () e, em seguida, faz um quadrado na tela.Não podemos usar SDL_Flip () para atualizar a 
+tela,precisamos chamar SDL_GL_SwapBuffers () para atualizar uma janela SDL / OpenGL.Agora iremos declarar a função void close() que irá destruir a janela criada .Agora 
+vamos declarar a janela que iremos renderizar dessa forma SDL_Window* gWindow = NULL .Agora iremos declarar o contexto OpenGL dessa forma SDL_GLContext gContext,agora vamos 
+declarar bool gRenderQuad = true que irá renderizar uma bandeira.Nós iremos agora aplicar a funçao bool init(),ela será ultilizada da seguinte forma nesse primeiro tutorial,
+iniciaremos a bandeira com bool sucess = true,após isso iremos verificar se o SDL foi inicializado se ele nao foi inicializador ela irá printar na tela SDL nao foi inicializado
+!SDL ERRO,se a SDL tiver sido inicializada a função irá usar a OpenGL 2.1 e depois irá criar uma janela com a funçao SDL_CreateWindow,feito isso o codigo irá verificar se a 
+janela realmente foi criada se ela nao foi criada irá aparecer na tela a janela nao foi criada,após a janela ser criada o codigo agora ira criar um contexto com a função 
+SDL_GL_CreateContext,e tambem nesse caso irá verificar se o contexto foi ou nao criado,se ele foi criado com sucesso o programa agora irá usar a sincronização vertical atraves
+da função SDL_GL_SetSwapInterval,ele irá colocar essa função em um if para verificar se foi possivel usar o VSync,agora o programa irá inicializar o OpenGL colocando 
+if(!initGL()),ou seja ela irá verificar se ele foi inicializado,após isso tudo a funçao retornará a variavel success.Agora iremos explicar a aplicação da função bool initGL()
+ela irá começar inicializando a variavel "boll success = true",após isso ela irá inicializar a matriz de projeção atraves da função glMatrixMode(GL_PROJECTION),agora iremos 
+verificar se tem algum erro para inicializar OpenGL com a função glGetError(),depois a função irá inicializar a matriz de modelo de visualização atraves da mesma função que 
+usamos para inicializar uma matriz de projeção,agora a função verifica novamente se o OpenGL foi inicializado corretamente,após isso a funçao irá inicializar a cor clara com
+a função glClearColor(0.f,0.f,0.f,1.f) e após isso verifica novamente se nao houve erro em inicializar o OpenGL,depois disso a função retorna success.Agora o codigo irá 
+implementar a funçao handleKeys,essa função só terá um if que irá verificar se foi digitado "q" para alternar ou nao o quadrado.O codigo irá implementar a função update,mas 
+nao será necessario ter nada nela pois nao será preciso atualização por frame.Agora a implementaçao da função render, ela usará a funçao glClear para poder limpar o buffer
+de cor e após isso ela irá renderizar o quadrado.Depois disso vem a implementação da função close que irá chamar a função SDL_DestroyWindow para fechar a janela e a função
+SDL_Quit para sair dos subsistemas SDL.Agora o codigo vai implementar a main, a primeira coisa a se fazer é iniciar SDl e criar uma janela,verifica se incializo corretamente
+se sim irá inicializar o sinalizador de loop principal com bool quit = false,após isso irá criar uma variavel manipuladora de eventos no caso "SDL_Event e",depois disso a 
+main irá ativar a entrada de texto com a função SDL_StartTextInput(),depois disso vai fazer um while enquanto a aplicação estiver rodando e outro while dentro desse que irá 
+manipular eventos na fila depois de fechar o segundo while irá chamar a funçar render() para renderizar quadrado e a função SDL_GL_SwapWindow(gWindow) para atualizar a tela
+após isso fecha o while e desativa a entrada de texto com a função SDL_StopTextInput() e depois disso é so usar a funçao close para finalizar o programa. 
+
+
+
+

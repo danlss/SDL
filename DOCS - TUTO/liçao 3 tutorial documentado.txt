@@ -1,0 +1,25 @@
+Tutorial 3: O visor
+
+Descriçao
+
+Neste tutorial nós vamos aprender a renderizar em só uma parte da tela,a viewport define a área retangular da tela que queremos renderizar,aqui neste tutorial vamos mexer com
+essa viewport para fazer coisas como renderização da tela dividida.Neste codigo assim como nos anteriores usaremos quatro bibliotecas SDl,SDL Opengl,IO padrão e strings,nesta
+parte inicial do codigo nós iremos declaras nossas constantes da tela no caso desse codigo usamos SCREEN_WIDTH,SCREEN_HEIGHT e SCREEN_FPS para largura altura e frames respecti-
+vamente,para nosso codigo nao ficar confuso quando chegarmos ao codigo de renderizaçao nós iremos enumerar algumas constantes que definem as formas que vamos usar a viewport,
+feito isso nós iremos colocar os prototicos de cada função que vamos usar no codigo as funções que usaremos seram bool init(),bool initGL(),update(),render(),close(),handleKeys(
+unsigned char key,int x,int y),que ja foram explicadas nos tutoriais anteriores,após declarar os prototipos das funções iremos declarar a janela que iremos renderizar usando
+SDL_Window* gWindow = NULL,depois disso vamos declarar o contexto com SDL_GLContext gContext e também declarar o modo de visualizaçao com int gViewportMode = VIEWPORT_MODE_FULL,
+agora vamos aplicar a função bool init() para iniciar o SDL,criar a janela e inicializar o OpenGL o funcionamento da funçao pode ser visto na documentaçao da funçao,feito isso
+agora vamos aplicar a função bool initGL() desta vez no top do codigo temos uma variavel global gViewportMode que define como iremos ultilizar a viewport,nossa função initGL é 
+praticamente a mesma que foi usada nos outros tutorias,mas agora ela tem uma chamada para glViewport() para inicializar a viewport,GLViewport() define a parte da tela que que-
+remos renderizar,definindo a coordenada x,coordenada y,largura e altura da área de renderização,como pode ser visto nesta função estamos apenas dizendo para renderizar uma tela
+inteira.Agora iremos implementar a funçao render() no topo dessa função iremos chamar a função glClear(GL_COLOR_BUFFER_BIT) para limpar a tela,resetar a matriz modelview com
+a função glLoadIdentity() e  usamos a fução glTranslatef(SCREEN_WIDTH/2.f,SCREEN_HEIGHT/2.f,0.f) para mover para o centro da tela,em "VIEWPORT_MODE_FULL", definimos a viewport 
+para ser a tela cheia e nós renderizamos um quadrado de tela cheia.Pode parecer redundante configurar novamente a viewport, mas nesta demonstração, vamos mudar a viewport 
+dependendo de "gViewportMode"(esse é o caso para tela cheia).(se nao for tela cheia vai ser assim) Aqui nós renderizamos o mesmo quadrado 640x480 em uma viewport que é metade 
+da largura / altura da tela no meio da nossa área de renderização.Portanto, as coordenadas de renderização ainda são 640x480 mesmo se a viewport for 320x240.Agora vamos colocar 
+o quadrado no topo da tela.Agora vamos colocar o quadrado nos 4 locais da tela e com isso temos vários viewports, o que é útil para jogos e simulações de splitscreen. O mesmo 
+quadrado é processado 4 vezes, apenas com diferentes cores e locais de exibição.E para o nosso último das demonstrações do viewport, nós renderizamos uma cena de tamanho 
+completo e em seguida, renderizamos uma versão menor no canto superior esquerdo.Ter uma viewport dentro de uma viewport pode ser útil para coisas como renderizar um radar na 
+tela.Claro, no final da nossa função de renderização, atualizamos a tela.Depois dessa função que acabamos de explicar nos iremos implementar a função handleKeys() que irá per-
+correr os modos de renderização do viewport quando o usuario pressionar q,nao é preciso explicar a main() pois a implementaçao dela é igual ao do tutorial 2.		

@@ -1,0 +1,18 @@
+Tutorial 15: Extensões e GLEW
+
+Descrição
+
+
+Há funcionalidade core OpenGL e, em seguida, há uma funcionalidade OpenGL avançada. O OpenGL versão 1.1 possui apenas dois modos de gravação de textura. O OpenGL 2.1 possui 5.
+Usando o OpenGL Extension Wrangler (GLEW), obteremos os endereços dos ponteiros da função e as constantes que precisamos para usar as novas formas de capa de textura.
+Em LOpenGL.h, estaremos aumentando nosso cabeçalho OpenGL para incluir a funcionalidade GLEW. Ao usar o GLEW, certifique-se de incluir glew.h antes de qualquer outro cabeçalho OpenGL ou 
+ele jogará um ajuste.
+Em LUtil.cpp, no topo da nossa função de inicialização, queremos agarrar nossa funcionalidade aberta OpenGL com glewInit (). Esta função inicializa todos os recursos OpenGL estendidos 
+que o seu driver OpenGL suporta e o deixa pronto para uso. O GLEW também vem com algumas constantes úteis. Se "GLEW_VERSION_2_1" for verdadeiro, temos pelo menos funcionalidade principal 
+do OpenGL 2.1. No código verificamos se temos a funcionalidade 2.1 disponível para nós antes de fazer o resto da nossa inicialização. O resto da nossa inicialização é o mesmo que antes.
+Para este tutorial, estamos fazendo o mesmo mapeamento/renderização de textura que no tutorial anterior. O que estamos fazendo diferente é a forma como definimos nosso embrulho de 
+textura.
+
+Graças a GLEW, agora temos um total de 5 maneiras de envolver a textura. "GL_CLAMP_TO_BORDER" será apertado na borda da textura, o que faz com que a textura pare o mapeamento passado 0,0 
+ou 1,0. "GL_CLAMP_TO_EDGE" irá prender a textura em 0.0 ou 1.0 e, em seguida, usar os valores de texel na borda e esticá-los para a borda do polígono. "GL_MIRRORED_REPEAT" fará com que a 
+textura se repita após 0.0 ou 1.0, apenas agora ela se refletirá após cada unidade de textura.

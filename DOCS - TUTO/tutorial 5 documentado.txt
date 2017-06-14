@@ -1,0 +1,67 @@
+Tutorial 5:Mapeamento de Textura e Manipulação de Pixel
+
+Bibliotecas:Neste tutorial usaremos as mesmas bibliotecas usadas nos tutoriais anteriores.
+
+Descrição
+
+Neste tutorial, vamos fazer uma textura de xadrez na memória e, em seguida, mapeá-lo para um quadrado renderizar uma imagem 2D.Para começar neste os prototipos as constantes 
+seram iguais a do tutorial anterior,após os prototipos e constantes iniciais vamos declarar o cabeçalho da nossa classe LTexture,primeiro temos nosso construtos/destruidor.
+Então temos loadTextureFromPixels32() que levará os dados de pixels e irá transforma-lo em uma textura.FreeTexture () é a nossa função para desalocar dados de textura. 
+Render () irá pegar a nossa textura e mapeá-la para um quadrado para renderizá-lo.Por fim, temos getTextureID (), textureWidth () e textureHeight () para obter informações 
+sobre nossa textura.Após isso vem a implementação da função bool init()que será da mesma forma que nós tutoriais anteriores,depois apenas implementações do construtor e 
+destrutor,depois disso iremos implementar a função bool LTexture::loadTextureFromPixels32( GLuint* pixels, GLuint width, GLuint height),esta função irá transformar os dados de 
+pixels em uma textura. É preciso um ponteiro para dados de pixels e as dimensões da textura.Antes de começar a carregar os dados de pixels, temos a lembrança de que é possível 
+carregar pixels duas vezes no mesmo LTexture, então liberamos dados de pixels existentes primeiro para garantir que estamos lidando com uma textura vazia.Depois disso, nós 
+atribuímos as dimensões do objeto.Em seguida, chamamos glGenTextures () que ironicamente na verdade não gera uma textura.Se você prestou atenção na definição da classe LTexture,
+você teria visto que "mTextureID" é um GLuint (GL inteiro não assinado). O que glGenTextures () faz é criar um nome de textura na forma de um número inteiro para usar como ID 
+para a textura. Com esta chamada para glGenTextures (), estamos gerando 1 ID de textura e colocando os dados dentro de "mTextureID".Depois de gerar a ID da textura, nós a 
+ligamos usando glBindTexture (). Com a nossa nova ID de textura ligada como a identificação de textura atual, podemos começar a fazer operações nele.Com glTexImage2D (), nós 
+atribuímos pixels à nossa ID de textura para gerar a textura.
+O que os argumentos de função significam da esquerda para a direita:
+1. GL_TEXTURE_2D - Alvo de textura ou o tipo de textura que estamos atribuindo aos pixels.
+2. 0 - O nível mipmap. Não se preocupe com isso por enquanto.
+3. GL_RGBA - O formato de pixel como a textura é armazenada. OpenGL leva isso como uma sugestão, não uma ordem.
+4. width - Largura da textura.
+5. height - Altura da textura.
+6. 0 - Largura da borda da textura.
+7. GL_RGBA - O formato dos dados de pixel que você está atribuindo.
+8. GL_UNSIGNED_BYTE - O tipo de dados para os dados de pixels que você está atribuindo.
+9. pixels - O endereço do ponteiro dos dados de pixel que você está atribuindo.
+
+Após esta chamada para glTexImage2D (), nossos dados de pixels agora devem estar setados confortavelmente na GPU.Agora que os pixels são atribuídos à textura, precisamos definir 
+alguns atributos da textura com glTexParameter ().Aqui estamos definindo GL_TEXTURE_MAG_FILTER e GL_TEXTURE_MIN_FILTER que controlam como a textura é mostrada quando é ampliada 
+e minificada, respectivamente. Vou entrar em mais detalhes sobre a filtragem de textura em futuros tutoriais, mas por agora só sei que estamos definindo esses dois atributos 
+para GL_LINEAR, o que nos dá bons resultados.Depois de terminar o carregamento da nossa textura, nós vincularemos uma textura NULL que, essencialmente, desvincula nossa textura. 
+Isso é importante porque, se acabamos de deixar a nossa textura ligada, quando queremos renderizar a geometria simples depois, ela textura com os dados de textura atuais 
+porque a textura ainda está ligada.Com a nossa textura carregada, verificamos o erro e devolvemos.Agora Aqui está a função freeTexture () que chama glDeleteTextures () em nossos 
+dados de textura, se houver.Após isso será a vez de implementar a função void LTexture::render( GLfloat x, GLfloat y ) verificamos se existe uma textura. Se assim for, nós nos 
+movemos para a posição de renderização e ligamos a textura para que possamos colocar textura no nosso quadrado.Com a nossa textura ligada, é hora de colocar textura no quadrado.
+Quando queremos colorir nossa geometria, chamamos glColor () antes de cada vértice.Quando queremos colocar a textura, atribuímos cada vértice uma coordenada de textura com 
+glTexCoord ().O que o glTexCoord faz é anexar um ponto na sua textura a um vértice. Então, quando seu quadrado for renderizado, uma textura será mapeada para ele.Antes de 
+analisarmos a forma como as coordenadas de textura funcionam, queria salientar que estamos processando nosso quadrado de forma diferente dessa vez.Até agora, estamos processando 
+nossos quadrados com a origem no centro.Se você olhar para a nossa chamada glVertex (), o quad agora é desenhado com a origem no canto superior esquerdo, da maneira que a 
+maioria das APIs de gráficos baseadas em pixel 2D fazem.Agora, as coordenadas de textura funcionam um pouco diferente das coordenadas do vértice.Em vez de usar coordenadas 
+x / y / z, eles usam o eixo s para representar a coordenada horizontal e o eixo t para representar a coordenada de textura vertical. cada eixo vai de 0 a 1.Então, se você deseja 
+mapear a textura da borda esquerda, você mapeará s = 0. Se você quer o mapa para a borda inferior, você mapeará t = 1.Mesmo que o A textura é 1024 texels (uma textura pixel é 
+chamada de texel), a borda direita ainda é s = 1.Então, no código acima, nós apenas mapeamos cada canto da textura para cada canto do quadrado.Agora iremos declarar três funções
+GLuint LTexture::getTextureID(),GLuint LTexture::textureWidth() e GLuint LTexture::textureHeight() que são funções para acessar nossas variáveis ??de membros.Agora vamos 
+implementar a função bool initGL() tem algo importante a notar: uma chamada para glEnable () para habilitar a texturação 2D. Certifique-se de não esquecer de habilitar a 
+texturização no seu programa, caso contrário, nenhuma das suas chamadas de texturização fará qualquer coisa.Agora a implementação da bool loadMedia(),Para este tutorial, 
+queremos fazer uma imagem de xadrez 128x128. Para fazer isso, vamos alocar 128 linhas de 128 pixels. Então, alocamos uma matriz GLuint com 128 * 128 de comprimento.Então, agora 
+vamos passar pelos pixels para dar cor a eles.Você pode estar se perguntando, como um GLuint é um pixel? Se você já mexeu com HTML, você sabe que a cor pode ser representada 
+com um valor 0-255 para o vermelho, dando um valor 0-255 para o verde e dando um valor 0-255 para o azul. O computador então mistura o vermelho, o verde e o azul para obter sua 
+cor.Assim, as cores podem ser representadas com números. Um GLuint é de 32 bits. Você pode representar os números 0-255 com um número inteiro não assinado de 8 bits. Você pode 
+obter os componentes de cores individuais, obtendo o endereço do inteiro de 32 bits e tratando-o como uma matriz de bytes, o que o código acima faz para cada pixel.Ah, e alguns 
+de vocês podem pensar "RGB é três componentes, 3 * 8 bits é 24 bits. Quais são os últimos 8 bits?". Os últimos 8 bits são Alpha, que controlam o quão opaco ou transparente é 
+um pixel. É por isso que o formato de pixel para glTexImage2D foi GL_RGBA.Após isso ainda na função loadMedia terá um if e else que iram criar a imagem do xadrez se é verdade, 
+ele define o pixel em branco e, se for falso, ele o deixa vermelho.Quando configuramos o pixel para ser branco, configuramos todos os componentes de cores para ser FF 
+(que é hexadecimal para 255).Quando configuramos o pixel para ser vermelho, definimos o primeiro componente de cor (vermelho) para ser 255, o segundo componente de cor (verde) 
+para ser 0, o terceiro componente de cor (azul) para ser 0 eo último componente de cor ( Alfa) para ser 255. Para alfa, 255 é completamente opaco e 0 é completamente 
+transparente.Depois de passar por todos os pixels para fazer a imagem do xadrez, passamos os pixels para a textura para carregá-los. Se houve um erro, ele retorna falso.
+Uma nota importante: a menos que você conheça o contrário, você deve assumir que a implementação do OpenGL em que você está trabalhando exige que a largura / altura da textura 
+seja uma potência de dois. Portanto, sua textura pode ser 64x64, ou 128x32, mas não 256x200. Vamos abordar a forma de contornar isso nos futuros tutoriais.Agora iremos implemen-
+tar a função void render(),em nossa função render (), nós renderizamos nossa textura de tabuleiro no centro da tela.E a implementação da main será igual a dos tutoriais anterio-
+res.		
+    
+ 
+ 

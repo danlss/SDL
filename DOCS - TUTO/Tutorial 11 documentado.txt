@@ -1,0 +1,22 @@
+Tutorial 11 :  Esticão e Filtros
+
+Descrição
+
+Não há nada que nos exija que nossas posições de vértice sejam do mesmo tamanho que a nossa textura. Neste tutorial, daremos diferentes tamanhos do quadrado para esticar
+nossa textura e usar a filtragem para controlar a aparência da nossa textura quando esticada.
+Em LTexture.h, nossa função render() agora possui um argumento adicional, um retângulo para definir o quanto queremos esticar a textura renderizada.Damos-lhe um valor padrão
+de NULL caso não desejemos esticar nossa textura.
+Em LTexture.cpp, no topo da nossa função render(), nossas coordenadas de textura funcionam da mesma forma que antes. O que estamos fazendo diferente é dar diferentes coordenadas
+de vértice. Se a função tiver um retângulo de estiramento, temos nossas dimensões do quadrado para ser igual ao tamanho do retângulo de estiramento. Agora, quando nosso quadrado
+texturizado renderiza, ele esticará a textura para se ajustar ao tamanho do quadrado.
+No topo de LUtil.cpp, declaramos algumas variáveis ​​globais. "GStretchedTexture" é uma textura que vamos carregar, que é de 160x120 pixels de tamanho. "GStretchRect" é o retângulo
+de estiramento que vamos usar para esticar a textura ao tamanho da tela. "GFiltering" irá controlar como a nossa textura é filtrada quando renderizada. A melhor maneira de explicar
+como funciona a filtragem é através da demonstração. Chegaremos a isso no nosso key handler. Em loadMedia() nós carregamos nossa textura e em render() nós a esticamos para o tamanho
+da tela.
+Usaremos pressionamentos de teclas para alternar nossa filtragem de textura. Quando o usuário pressiona Q, a textura que carregamos está vinculada para que possamos fazer operações
+nele. Mesmo que estivéssemos fora da classe LTexture, desde que tenhamos a ID da textura, podemos fazer operações na textura. Em seguida, alternamos e configuramos a filtragem para 
+a textura. Essas chamadas de função devem parecer familiares porque as chamamos na nossa função de carregamento de textura. "GL_TEXTURE_MAG_FILTER" controla como a textura é filtrada
+quando a textura está esticada. O padrão que definimos quando carregamos a textura é "GL_LINEAR". Isso significa que nossa textura mistura os pixels ao alongá-lo. 
+Quando "GL_TEXTURE_MAG_FILTER" estiver configurado para "GL_NEAREST", o OpenGL apenas agarra o valor texel mais próximo, o que resulta em um aspecto mais intenso. Observe que também 
+definimos "GL_TEXTURE_MIN_FILTER", que controla a forma como a textura é filtrada quando ela é menor. "GL_TEXTURE_MAG_FILTER" e "GL_TEXTURE_MIN_FILTER" não precisam ser o mesmo valor 
+se você quiser filtros diferentes aplicados em situações diferentes. Finalmente, depois de trocar a filtragem, desvinculamos a textura.

@@ -1,0 +1,24 @@
+Tutorial 14: Texturas repetidas
+
+Descrição
+
+Neste tutorial, vamos criar um efeito de mosaico de rolagem fazendo alguns truques com coordenadas de textura.
+Em LTexture.cpp, além da filtragem de textura, outro parâmetro que você pode configurar para a sua textura é como as texturas são envolvidas. Sabemos que foi dito no anteriormente 
+que as coordenadas de textura passam de 0,0 para 1,0, mas isso não é necessariamente verdadeiro. Você pode dar uma coordenada de textura de 2.0 que fará com que o 200% de textura seja 
+mapeado. Isso significa que a textura será mapeada duas vezes ao longo desse eixo. Isso pressupõe que você tenha seu ajuste de textura configurado para GL_REPEAT. Este é o invólucro 
+de textura padrão ao criar uma textura OpenGL, e agora vamos configurá-la explicitamente. No topo do LTexture.cpp, declaramos o nosso invólucro de textura padrão. 
+Em todas as nossas funções de carregamento de textura, definimos o filme de textura usando glTexParameter(). Definimos o invólucro de textura para o eixo de textura s e o eixo de 
+textura t.
+No topo de LUtil.cpp, declaramos algumas variáveis ​​globais, a primeira das quais é a textura que vamos marcar. Em segundo lugar, há as compensações de textura que vamos usar para 
+rolar a textura. Por fim, o "gTextureWrapType" que controla a forma como envolvemos nossa textura. Como de costume, loadMedia() carrega nossa textura. Desta vez, a função update() 
+atualiza nosso offset de textura para que nossa textura role. Nós também tamponamos a rolagem, então, sempre que a textura vai muito longe, a respectiva coordenada é redefinida, 
+permitindo que nossa rolagem se encaminhe. Em render() depois de limpar o buffer de cores, calculamos as coordenadas de textura para o canto inferior direito do quadrado. Digamos que 
+a textura é 128 pixels de largura e a tela é 256 pixels de largura. O que isso faria é calcular a coordenada certa como 256/128 ou 2.0. Então, a textura seria mapeada 2 vezes ao longo 
+do eixo x / s. Então, fazemos o mesmo para o eixo y / t. Agora, queremos usar a textura que carregamos, então nós a ligamos usando glBindTexture (). Em seguida, definimos a matriz atual 
+como a matriz de textura com glMatrixMode (). A matriz de textura pode ser usada para transformar coordenadas de textura muito da mesma maneira que a matriz de modelview pode ser usada 
+para transformar coordenadas de vértice. Aqui, inicializamos a matriz de textura para a matriz de identidade. Após a inicialização da matriz de textura, traduzimos para o offset de 
+textura. Lembrando que 1 é igual a um comprimento de textura e não a um pixel, dividimos cada offset de textura pelo comprimento da textura. Então, finalmente, nós renderizamos um 
+quadrado com as coordenadas de textura transformadas.
+
+Finalmente, quando o usuário pressiona Q, o filme da textura alterna entre GL_REPEAT e GL_CLAMP. Se o invólucro da textura for GL_REPEAT, quando encontrar uma coordenada de textura 
+além de 0.0 e 1.0, continuará a mapear a textura e a repetir. Se o invólucro da textura for GL_CLAMP, o mapeamento de textura irá parar além de 0.0 e 1.0.

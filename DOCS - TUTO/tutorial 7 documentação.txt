@@ -1,0 +1,15 @@
+Tutorial 7 :  Recorte de Texturas
+
+Descrição
+
+No último tutorial, nós apenas mapeamos toda a textura. Aqui vamos mapear porções de uma textura para renderizar imagens de uma folha de sprite.
+No novo arquivo LFRect.h, definimos um tipo de dados de retângulo. Usaremos isso para definir a região na folha de sprite que queremos renderizar.A razão pela qual isso é 
+chamado de retângulo flutuante é porque você pode, em algum momento, querer um retângulo inteiro devido a erros de ponto flutuante. Agora vamos explicar a LTexture.h, em 
+LTexture.h, vamos fazer modificações na nossa função render (). Ele precisa pegar um retângulo para definir a área de textura que queremos renderizar. Nós também lhe demos 
+um argumento padrão de NULL, no caso de querermos renderizar a textura completa sem definir a área. Da LTexture.cpp temos que perto do topo da nossa função render () modificada,
+definimos nossas coordenadas de textura padrão e largura / altura quadrado para nossas coordenadas de vértice.Agora, se a função obtiver um retângulo de clipe, devemos ajustar 
+nossas coordenadas de textura e vértice de acordo. As coordenadas do vértice são bastante fáceis, basta obter a largura / altura do retângulo do grampo.Em coordenadas de pixels, 
+a posição x é 128 em uma textura de 256 pixels de largura. 128/256 é 0,5. Então, para transformar as coordenadas de pixels em coordenadas de mapeamento de textura, pegue a 
+posição e divida pela largura do pixel (ou altura para a posição vertical). Com nossas coordenadas de textura e nossas dimensões de sprite calculadas, nós renderizamos nosso 
+quadrado texturizado. No topo de LUtil.cpp, declaramos nossa folha de sprite e retângulos de clipe.Na nossa função loadMedia (), definimos nossos retângulos de clipes e 
+carregamos nossa textura.Finalmente, em nossa função de renderização, renderizamos os sprites de flecha individuais em cada canto da tela.
