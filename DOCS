@@ -418,6 +418,16 @@ O atributo OpenGL para definir, valor para o atributo
   Especifica um ponteiro para os novos dados que serão copiados no armazenamento de dados.
 - Retorno: void.
 
+* initVBO()
+- Função que inicia o VBO (Vertex Buffer Object), VBO transfere dados para a memória gráfica de alto desempenho.
+- Parametros: void.
+- Retorno: void.
+
+* FreeVBO()
+- Função que libera o VBO.
+- Parametros: void. 
+- Retorno: void.
+
 * 
 - Função que 
 - Parametros: 
