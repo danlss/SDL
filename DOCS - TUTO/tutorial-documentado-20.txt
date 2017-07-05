@@ -1,0 +1,43 @@
+tutorial 20 : Fontes de bitmap
+
+Descrição
+
+O OpenGL não possui funções incorporadas para renderizar texto. Felizmente, usamos uma folha de sprite para renderizar imagens de texto.Uma fonte de bitmap é simplesmente uma 
+folha de sprite especializada. 
+Em LSpriteSheet.h Antes de criar nossa fonte de bitmap, vamos adicionar um novo recurso. No tutorial anterior, ele tinha o formato de quadrado texturizado a partir do centro, 
+para o bitmap, queremos renderizar cada sprite de caractere do canto superior esquerdo, então, vamos adicionar a capacidade de escolher a origem para os sprites. para a classe 
+LSpriteSheet, selecionar a origem só afetará a forma como os dados do vértice são gerados. Em LSpriteSheet.cpp no topo da função generateDataBuffer (), geramos os dados VBO e 
+IBO como antes e nos preparamos para analisar os retanges de recorte, desta vez, temos algumas variáveis ??adicionais para definir o vértice superior / inferior / esquerda / 
+direita, após definir nossos índices, calculamos os deslocamentos superiores e inferiores e os deslocamentos x esquerdo / direito para os dados do vértice. Em seguida, 
+estabelecemos nossas coordenadas de vértice / textura e buffer de índice por sprite como antes. Observe como as coordenadas da textura não mudaram. Ainda estamos mapeando a 
+mesma porção da textura, independentemente da nossa origem. O que está mudando é como colocamos as posições do vértice ao renderizar, finalmente, terminamos de gerar o VBO e 
+reportar quaisquer erros se precisarmos.
+Agora em LFont.cpp uma coisa importante a notar é que a função loadBitmap () espera um caminho para uma imagem de fonte de bitmap que só tem preto, branco e tons de cinza, que 
+preto é a cor de fundo. Qualquer outro tipo de fonte de bitmap não funcionará com este analisador. Felizmente, esses tipos de fontes bitmap são bastante padrão. Primeiro, 
+queremos desalocar qualquer fonte carregada anteriormente, em seguida, carregamos os pixels da fonte de bitmap para que possamos começar a analisá-los, o nosso analisador de 
+fontes de bitmap também assume que nós temos os nossos personagens sprites dispostos em uma grade 16x16 em ordem ASCII , a primeira coisa que fazemos depois de carregar os 
+pixels é dividir a largura / altura da imagem em 16, então sabemos quais são as dimensões para cada célula individual na grade. Então, temos as variáveis ??"top", "bottom" e 
+"aBottom", que usaremos para calcular nossas variáveis ??de espaçamento. Uma vez que vamos passar pelos pixels do bitmap, temos "pX" / "pY" para coordenadas de pixels. "BX" 
+/ "bY" são usados ??para acompanhar as coordenadas de pixels da célula que estamos analisando atualmente. "CurrentChar" controla o valor ASCII para a célula atual que estamos 
+analisando, e "nextClip" é o recorte de retângulos para o sprite de personagem que estamos analisando atualmente. Antes de começar a percorrer os pixels da célula, calculamos 
+os deslocamentos de pixels base para a célula e inicializamos o próximo retângulo de recorte para ser toda a célula, o que estamos fazendo aqui está passando pela coluna de 
+pixels da célula por coluna e linha a linha até encontrar o primeiro pixel que não é um pixel de fundo, quando esse pixel é encontrado, sabemos que encontramos o deslocamento 
+x para o sprite de personagem. Desta vez, começamos a analisar os pixels do lado direito da célula para encontrar a largura do sprite, ao procurar o topo da célula, fazemos 
+algo um pouco diferente. Para cada sprite de personagem, existe um espaço entre o topo da célula e o sprite real, queremos minimizar o espaço desperdiçado, mas também queremos 
+que nossos retângulos de recorte sejam de altura uniforme. Se não estivessem, eles renderariam aleatoriamente deslocados para cima e para baixo. Aqui no for( int pRow_b = 
+cellH - 1; pRow_b >= 0; pRow_b-- ) estamos encontrando o ponto mais baixo do personagem sprites. Ao encontrar o pixel mais baixo de todos os sprites e encontrar o pixel mais 
+alto para todos os sprites, podemos calcular qual é a altura máxima necessária para renderizar uma linha de texto. Isso é útil ao renderizar texto.Depois de concluir a análise 
+da célula atual, adicionamos o sprite de personagem aos nossos sprites de clipe. Em seguida, incrementamos o valor ASCII e analisamos a próxima célula até que todas as 256 
+células tenham sido analisadas. Depois de concluir a análise de todas as células, sabemos o que o ponto de pixel superior para todos os sprites do personagem são. Aqui, lop 
+off a altura extra de todos os personagens sprites. Depois de concluir a análise dos pixels e o cálculo dos retângulos do clip, geramos a textura e os dados do VBO. Por último, 
+queremos calcular as variáveis ??de espaçamento. "MSpace" é definido como metade da largura da célula. Você não precisa configurá-lo dessa maneira, mas me deu bons resultados. 
+"MNewline" é calculado como o espaço entre o ponto de pixel superior e a linha de base. Por último, "mLineHeight" é a diferença entre o ponto de pixel superior e o ponto de 
+pixel mais baixo. A função freeFont () chama freeTexture e, como um LFont é um LSpriteSheet, ele chamará a implementação LSpriteSheet e desalocará os dados da folha de sprite 
+também. Agora nossa função renderText () que se parece com uma versão especializada da função renderSprite () de LSpriteSheet. Depois de inicializar as posições de desenho, 
+traduzimos para o ponto de renderização, ligamos a textura e configuramos os dados do VBO. Aqui for( int i = 0; i < text.length(); ++i ) está o nosso loop for que passa pela 
+string e renderiza personagens sprites. Existem dois casos especiais, se tivermos um espaço, não há imagem para renderizar, então acabamos de traduzir e mudar o ponto de 
+renderização, se tivermos uma nova linha, traduzimos de volta ao offset x base, traduzimos uma nova linha e atualizamos o ponto de renderização. Se temos um sprite de 
+personagem real para desenhar, obtemos seu valor ASCII e alocamos o IBO do sprite de personagem para que possamos renderizar com ele. Então, traduzimos o passado do sprite de 
+personagem para que possamos renderizar o próximo personagem até que não haja mais caracteres.
+Agora vamos explicar algumas funções em LUtil.cpp, em loadMedia (), nós carregamos nossa fonte de bitmap. E em render (), nós renderizamos nosso texto. Usando, glColor (), 
+podemos dar a cor do nosso texto ao renderizar.

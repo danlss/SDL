@@ -1,0 +1,35 @@
+Tutorial 19 : Folhas de Sprite
+
+
+Descrição
+
+No tutorial anterior, estávamos atualizando os dados do vértice em nosso VBO em todos os quadros, apesar do fato de que nossos dados de vértice não mudaram de quadro para 
+quadro. Se você tiver um conjunto de imagens de sprite que você reutilize cada quadro, você pode simplesmente pré-alocar seus dados de vértice.
+Neste tutorial, da LTexture.h teremos uma classe que herda da LTexture. Para garantir que o nosso destrutor de classe base seja chamado, nós o tornamos virtual.também vamos 
+substituir a forma como as texturas são liberadas na classe filho.
+Agora vamos olhar a LSpriteSheet.h que herda da classe LTexture. Uma folha de sprite, em nosso caso é uma textura com uso especializado.No topo, temos o construtor e o 
+destrutor como costumamos fazer. Então, temos addClipSprite (), que adiciona um retângulo de clipe para um sprite à matriz de membros. A função getClip () obtém um clipe da 
+matriz de membros. Uma vez que tenhamos todos os retângulos de clipe definidos, chamaremos generateDataBuffer () para usar nossos retângulos de clip para gerar o VBO e IBOs. 
+Onde terminamos com os retângulos do nosso clipe, chamaremos FreeSheet () para desalocar nossos dados de recorte. LTexture é herdado publicamente, então todas as funções de 
+base pública ainda podem ser acessadas. Nós vamos fazer algumas mudanças no freeTexture (), como você verá mais adiante no tutorial. Por fim, temos renderSprite () que, claro, 
+torna um sprite. Em termos de novas variáveis, temos "mClips", que representa nossa matriz de retângulos de clipe. Então, temos "mVertexDataBuffer", que usaremos para armazenar 
+os dados do vértice para todos os nossos sprites em um VBO grande. Por fim, temos "mIndexBuffers", que serão uma série de IBOs. Para esta implementação de uma folha de sprite, 
+teremos no VBO grande e um IBO para cada sprite individual.Agora vamos explicar a LSpriteSheet.cpp nela o construtor inicializa as variáveis ??de membros e o destrutor desaloca 
+os dados da folha de sprite. Lembre-se de que o destruidor LTexture é virtual, de modo que o LTexture base é desalocado depois que o LSpriteSheet é desalocado.
+A função addClipSprite () simplesmente adiciona no retângulo de recorte no final do vetor STL e retorna o índice do último elemento. GetClip () retorna o retângulo do clipe 
+solicitado. Nós não verificamos os limites da matriz porque a obtenção das dimensões do sprite pode ser amplamente utilizada durante a renderização, uma parte crítica do 
+desempenho do programa. Agora na função bool LSpriteSheet::generateDataBuffer() depois de carregar nossa textura e adicionar todos os retângulos de clipe para os sprites que 
+queremos renderizar, é hora de gerar nossos dados VBO, depois de ter certeza de que existe uma textura básica para renderizar e cortar retângulos para gerar dados, alocamos 
+nossos dados de vértice (com 4 vértices por sprite) e um IBO por sprite, em seguida, geramos o nosso VBO e os IBOs para cada sprite Então, nós conseguimos a largura / altura 
+da textura para que possamos mapear nossas coordenadas de textura. Depois disso, declaramos alguns índices de sprite que usaremos para os nossos IBOs.Agora estamos prontos 
+para passar pelos retângulos de clipe e definir nossos dados de índice / vértice. No topo do nosso loop for, estabelecemos nossos dados de índice para o sprite atual, depois 
+de definir nossos índices para o sprite atual, definimos os dados do vértice para o sprite atual. Desta vez, a origem do sprite está no centro do sprite, depois que terminamos 
+de passar pelos sprites com o loop for, definimos os dados do VBO para toda a nossa folha de sprite. Em freeSheet (), tudo o que fazemos é desalocar os dados da folha de 
+prite, pois podemos querer reutilizar o LTexture básico. Observe como "mIndexBuffers" é excluído por causa dos nomes IBO que alocamos dinamicamente. Aqui está o motivo pelo 
+qual fizemos a função freeTexture () no LTexture virtual. Como LSpriteSheet herda LTexture publicamente, todas as funções públicas básicas estão expostas. Nós não queremos que 
+isso aconteça onde há dados de vértice sem textura. Com esta função overidden, o LSpriteSheet irá desalocar os dados da folha de sprite e a textura da base. Finalmente, em 
+nossa função renderSprite (), ligamos nossa VBO monolótica com nossas coordenadas de vértice e textura e renderizamos usando o IBO específico do sprite.
+No topo de LUtil.cpp declaramos nossa folha de sprite, em loadMedia (), carregamos nossa textura de folha de sprite como faríamos com um LTexture simples. Então nós os 
+retângulos do clipe de cada sprite. Por fim, geramos os buffers de dados dos retângulos de clipe. Finalmente na função render (), renderizamos cada um dos sprites nos 4 cantos.
+
+

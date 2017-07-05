@@ -1,0 +1,57 @@
+No tutorial de Font Bitmap, tínhamos uma textura RGBA, mas nós só nos importamos com a luminosidade de cada pixel para a transparência alfa. Para economizar espaço de textura, adicionaremos a capacidade de renderizar texturas alfa que tenham apenas um componente alfa. O uso de pixels de 8 bits economizará 75% do espaço usado por pixels de 32 bits
+
+
+Na classe LTexture, "mPixels" foi modificado para "mPixels32" para distingui-lo de "mPixels8", que é um ponteiro para pixels de 8 bits. Observe que "mPixels8" é um ponteiro GLubyte, que significa byte GL não assinado. Nós também temos "mPixelFormat", que acompanha o tipo de dados de pixels que estamos usando. De LTexture.h
+Nossas funções de carregamento de textura foram renomeadas para especificar que elas carregam dados de pixel de 32 bits.
+De LTexture.h
+
+Agora temos versões de 8 bits de carregamento de pixels e funções geradoras de textura.
+
+Nós também temos um acessório de dados de pixel de 8 bits.
+
+
+E é claro que temos nossos manipuladores de pixel de 8 bits.
+
+Como sempre, nunca se esqueça de inicializar seus ponteiros.
+
+Todas as nossas funções de carregamento de pixel / textura de 32 bits (que não vamos passar individualmente) agora também especificam qual é o formato de pixel para os dados.
+
+
+A função loadPixelsFromFile8 () é em grande parte a mesma que a nossa antiga função loadPixelsFromFile32 () com algumas diferenças importantes. Ele aloca uma série de GLubytes (lembre-se de que estamos lidando com dados de 8 bits aqui) para o ponteiro "mPixel8" e configura o formato de pixel como "GL_ALPHA". Quando ele copia os pixels com memcpy (), é apenas um byte por pixel, então não multiplicamos o tamanho por quatro, como ocorreu com dados RGBA.
+O que também muda é como o DevIL carrega os dados de pixels. Antes de ilConvertImage () converter o pixel para RGBA. Agora converte os pixels em luminância. Os pixels de luminância têm um único byte que diz como eles são brilhantes. Como no tutorial original Bitmap Font, vamos usar o brilho dos pixels para misturar o texto com facilidade.
+
+Ao criar uma textura alfa, você deve configurar o formato de pixel como "GL_ALPHA" em vez de "GL_RGBA", enviando pixels com glTexImage2D ().
+
+Ao liberar texturas, temos que nos livrar dos dados de pixel de 8 bits também.
+
+
+Ao bloquear a textura para atualizar, garantimos que a textura ainda não está bloqueada. Em seguida, alocamos a memória de pixels adequada e obtemos os dados de pixels da textura. Desta vez, glGetTexImage () aceita o formato de pixels para obter os pixels adequados.
+
+Ao atualizar a textura, queremos garantir que os pixels sejam atualizados e uma textura a ser atualizada. Então, ligamos a textura e selecionamos os pixels a serem enviados com o operador ternário.
+
+Para aqueles que não conhecem o operador ternário, é uma maneira elegante de manter uma declaração if / else em uma única linha. Em poucas palavras, funciona assim:
+(Condição)? Devolva isso se for verdade: devolva isso se for falso.
+
+Então, se o formato de pixel for RGBA, obtenha os pixels de 32 bits e, se não conseguir os pixels de 8 bits.
+
+Depois de atualizar os pixels com glTexSubImage2D (), desalinhamos os dados de pixels e desvinculamos a textura.
+
+
+Nossas funções de manipulação de pixels funcionam praticamente as mesmas. A única diferença é qual o ponteiro que eles usam.
+Com a classe LTexture atualizada para lidar com texturas de 8 bits, loadBitmap () pode usar isso para economizar muita memória ao carregar fontes de bitmap.
+
+O topo da função parece praticamente o mesmo com pouca diferença. Com pixels de luminância de 8 bits, a cor preta é apenas um 0 byte. Obviamente, também alteramos a função de carregamento de pixels para carregarPixelsFromFile8 () para carregar os pixels de 8 bits.
+
+
+Analisar cada uma das células sprite funciona basicamente o mesmo, só agora estamos recebendo e comparando pixels de 8 bits.
+
+Depois de analisar todas as células, o resto do código deve ser bastante familiar. Os tops dos sprites são definidos, a textura é carregada (desta vez em 8 bits), gere os dados do VBO da mesma forma que antes, defina o invólucro de texturas da fonte e defina as variáveis de espaçamento.
+
+Desta vez, ignoramos a mistura dos pixels, já que não precisamos misturar pixels que já estão em formato alfa.
+
+
+Como você pode ver, a renderização do texto funciona exatamente o mesmo. Um formato de pixel diferente significa apenas que a cor é tratada de forma diferente. De LUtil.cpp
+Rom de fora, a fonte de bitmap parece funcionar exatamente o mesmo, mesmo que ele use muito menos memória de textura do que costumava fazer.
+
+Você pode estar se perguntando: "Se tudo o que temos é o valor alfa, quais são os valores RGB?". Ao usar uma textura alfa, os valores RGB são definidos como brancos. Esta renderização de texto produzirá texto verde muito da mesma maneira que a fonte de bitmap produziu texto vermelho no tutorial anterior.
+
