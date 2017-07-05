@@ -428,10 +428,30 @@ O atributo OpenGL para definir, valor para o atributo
 - Parametros: void. 
 - Retorno: void.
 
-* 
-- Função que 
-- Parametros: 
-- Retorno: 
+* initFreeType ()
+- Função que inicializa fontes FreeType.
+- Parametros: void.
+- Retorno: void.
+
+* loadFreeType ()
+- Função cria uma textura de 8 bits a partir do arquivo fornecido.
+- Parametros: dimensões e tamanho do nosso pixel.
+- Retorno: booleano, true ou false para sucesso ou insucesso, respectivamente.
+
+* memcpy()
+- Função que recebe um destino, uma fonte e numero de bytes a copiar e faz uma copia direta da memoria da fonte para o destino.
+- Parametros: matriz destino, a fonte de dados e o numero de bytes a copiar.
+- Retorno: Destino da matriz.
+
+* Freefont()
+- Função que desaloca as texturas de fontes inicializadas.
+- Parametros: void.
+- Retorno: void.
+
+* freesheet()
+- Função que desaloca dados de recorte.
+- Parametros: void.
+- Retorno: void.
 
 * 
 - Função que 
